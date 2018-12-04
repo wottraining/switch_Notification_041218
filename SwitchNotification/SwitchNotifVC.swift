@@ -41,8 +41,10 @@ class SwitchNotifVC: UIViewController {
         switch sender.selectedSegmentIndex {
             case 0 :
                 defaultUser.set(false, forKey: "notifON")
-                currentUserNotification.removeAllPendingNotificationRequests()
-                print("All notifi denied...")
+                if pendingRequest != nil {
+                    currentUserNotification.add(pendingRequest!, withCompletionHandler: nil)
+                    print("prepare notification success...")
+                }
                 break
             case 1 :
                 defaultUser.set(true, forKey: "notifON")
@@ -62,8 +64,10 @@ class SwitchNotifVC: UIViewController {
             case 0 :
                 segmentBtn.selectedSegmentIndex = 1
                 defaultUser.set(true, forKey: "notifON")
-                currentUserNotification.add(pendingRequest!, withCompletionHandler: nil)
-                print("prepare notification success...")
+                if pendingRequest != nil {
+                    currentUserNotification.add(pendingRequest!, withCompletionHandler: nil)
+                    print("prepare notification success...")
+                }
             break
             case 1 :
                 segmentBtn.selectedSegmentIndex = 0
@@ -86,6 +90,7 @@ class SwitchNotifVC: UIViewController {
             print("prepare notification success...")
         } else {
             print("notification denied...")
+            pendingRequest = nil
         }
         countNotif += 1
     }
